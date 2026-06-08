@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── base ─────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  color: #000;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── holographic text (light mode) ────────────────── */
+
+.holo-text-light {
+  background: linear-gradient(
+    128deg,
+    #6366f1 0%,
+    #3b82f6 16%,
+    #8b5cf6 33%,
+    #ec4899 50%,
+    #06b6d4 66%,
+    #10b981 82%,
+    #6366f1 100%
+  );
+  background-size: 300% 300%;
+  animation: holoShiftLight 7s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes holoShiftLight {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ─── noise grain (light mode) ─────────────────────── */
+
+.grain-overlay-light {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+/* ─── cursor glow (light mode) ─────────────────────── */
+
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 340px; height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: left 0.1s ease, top 0.1s ease;
+  z-index: 1;
+}
+
+/* ─── nav link (light mode) ────────────────────────── */
+
+.nav-link-light { position: relative; }
+.nav-link-light::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1px;
+  background: rgba(0,0,0,0.6);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link-light:hover::after { width: 100%; }
+
+/* ─── ticker ────────────────────────────────────────── */
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-track { animation: ticker 25s linear infinite; }
+
+/* ─── project card (light mode) ────────────────────── */
+
+.project-card-light {
+  transition:
+    border-color 0.5s ease,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s ease;
+}
+
+.project-card-light:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.08),
+    0 24px 80px rgba(0,0,0,0.08),
+    0 0 60px rgba(99,102,241,0.08);
+}
+
+/* ─── service desc reveal ───────────────────────────── */
+
+.service-desc {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease;
+}
+
+.group:hover .service-desc {
+  max-height: 60px;
+  opacity: 1;
+}
