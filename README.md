@@ -1,4 +1,4 @@
-# A3 Productions -- Animated Portfolio
+# A3 Productions 
 
 A high-end, scroll-driven portfolio website for A3 Productions. Light mode by default, with cinematic motion design, cascading card animations, and meticulous typographic hierarchy.
 
