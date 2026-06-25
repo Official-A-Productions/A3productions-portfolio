@@ -1,8 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .font-classic {
+    font-family: 'EB Garamond', serif;
+  }
+}
+
+@media (max-width: 768px) {
+  .cursor {
+    display: none !important;
+  }
+}
 
 /* ─── base ─────────────────────────────────────────── */
 
@@ -11,7 +23,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'EB Garamond', serif;
   background: #fff;
   color: #000;
   overflow-x: hidden;
