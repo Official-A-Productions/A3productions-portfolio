@@ -63,30 +63,39 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* NAV */}
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-14 py-6"
-        initial={{ opacity: isHome ? 0 : 1, y: isHome ? -20 : 0 }}
-        animate={{ opacity: showNav ? 1 : 0, y: showNav ? 0 : -20 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-14 py-5"
+        initial={{ opacity: isHome ? 0 : 1, y: isHome ? -16 : 0 }}
+        animate={{ opacity: showNav ? 1 : 0, y: showNav ? 0 : -16 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          backgroundColor: isHome ? navBg : 'rgba(244,244,244,0.92)',
-          borderBottom: isHome ? navBorderBottom : '1px solid rgba(0,0,0,0.08)',
-          backdropFilter: 'blur(12px)',
+          backgroundColor: isHome ? navBg : 'rgba(244,244,244,0.95)',
+          borderBottom: isHome ? navBorderBottom : '1px solid rgba(0,0,0,0.07)',
+          backdropFilter: 'blur(16px)',
           pointerEvents: showNav ? 'auto' : 'none',
         } as never}
       >
-        <Link to="/" className="flex items-center gap-3">
-          <img src="/image.png" alt="A3 Productions" className="h-8 w-auto object-contain filter invert" />
-          <div className="w-px h-4 bg-gray-300" />
-          <span className="text-gray-700 text-[10px] tracking-[0.3em] uppercase font-medium">Productions</span>
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <img
+            src="/image.png"
+            alt="A3 Productions"
+            className="h-7 w-auto object-contain filter invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+          />
+          <span className="hidden sm:block text-[9px] tracking-[0.4em] uppercase text-gray-500 group-hover:text-black transition-colors duration-300">
+            A³ Productions
+          </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-9">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.label}
               to={item.href}
-              className={`nav-link-light text-[11px] tracking-[0.22em] uppercase transition-colors duration-300 ${
-                location.pathname === item.href ? 'text-black' : 'text-gray-600 hover:text-black'
+              className={`relative text-[10px] tracking-[0.35em] uppercase font-medium transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:transition-all after:duration-300 ${
+                location.pathname === item.href
+                  ? 'text-black after:w-full'
+                  : 'text-gray-500 hover:text-black after:w-0 hover:after:w-full'
               }`}
             >
               {item.label}
@@ -94,6 +103,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           ))}
         </div>
 
+        {/* Mobile hamburger */}
         <div className="md:hidden">
           <StaggeredMenu
             isFixed={true}

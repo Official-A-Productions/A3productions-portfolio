@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowUpRight, Mail, MapPin, Clock } from 'lucide-react';
+import { Globe3D, GlobeMarker } from '../components/ui/3d-globe';
 
 /* ─── reveal ──────────────────────────────── */
 const REVEAL_UP = {
@@ -40,6 +41,15 @@ const faqs = [
   { q: 'Can you take over an existing codebase?', a: 'Yes. We\'ve successfully rescued and scaled multiple legacy codebases. We\'ll do a thorough audit before committing to a roadmap.' },
 ];
 
+const noidaMarker: GlobeMarker[] = [
+  {
+    lat: 28.5355,
+    lng: 77.3910,
+    src: "https://assets.aceternity.com/avatars/1.webp",
+    label: "Noida, UP",
+  }
+];
+
 export default function ContactPage() {
   const [formState, setFormState] = useState({ name: '', email: '', project: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -54,18 +64,38 @@ export default function ContactPage() {
   return (
     <div className="pt-0 bg-[#f4f4f4]">
       {/* Hero */}
-      <section className="relative pt-40 pb-24 px-8 md:px-16 border-b border-gray-200">
-        <Reveal variant={REVEAL_LEFT}>
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-4 font-sans">Get In Touch</p>
-          <h1 className="text-6xl md:text-9xl font-classic uppercase leading-none tracking-tight text-black">
-            Let's<br /><span className="text-gray-400">Talk</span>
-          </h1>
-        </Reveal>
-        <Reveal delay={200}>
-          <p className="mt-8 text-xl md:text-2xl font-classic italic text-gray-600 max-w-xl leading-relaxed">
-            Tell us about your project. We respond to every inquiry within 24 hours.
-          </p>
-        </Reveal>
+      <section className="relative pt-40 pb-24 px-8 md:px-16 border-b border-gray-200 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+          <div>
+            <Reveal variant={REVEAL_LEFT}>
+              <p className="text-sm uppercase tracking-widest text-gray-500 mb-4 font-sans">Get In Touch</p>
+              <h1 className="text-6xl md:text-9xl font-classic uppercase leading-none tracking-tight text-black">
+                Let's<br /><span className="text-gray-400">Talk</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={200}>
+              <p className="mt-8 text-xl md:text-2xl font-classic italic text-gray-600 max-w-xl leading-relaxed">
+                Tell us about your project. We respond to every inquiry within 24 hours.
+              </p>
+            </Reveal>
+          </div>
+          
+          <div className="relative w-full aspect-square max-h-[500px] flex items-center justify-center mt-8 lg:mt-0 px-4 md:px-0">
+            <Reveal delay={400} className="w-full h-full relative flex items-center justify-center">
+              <div className="w-full h-full max-w-[400px] lg:max-w-none mx-auto flex items-center justify-center">
+                <Globe3D
+                  markers={noidaMarker}
+                  className="w-full h-full"
+                  config={{
+                    bumpScale: 5,
+                    autoRotateSpeed: 0.3,
+                    showAtmosphere: false,
+                  }}
+                />
+              </div>
+            </Reveal>
+          </div>
+        </div>
       </section>
 
       {/* Contact info + form */}

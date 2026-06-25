@@ -6,11 +6,11 @@ import './FlowingMenu.css';
 function FlowingMenu({
   items = [],
   speed = 15,
-  textColor = '#000',
-  bgColor = '#f4f4f4',
-  marqueeBgColor = '#000',
-  marqueeTextColor = '#fff',
-  borderColor = '#000'
+  textColor = '#fff',
+  bgColor = '#120F17',
+  marqueeBgColor = '#fff',
+  marqueeTextColor = '#120F17',
+  borderColor = '#fff'
 }) {
   return (
     <div className="menu-wrap" style={{ backgroundColor: bgColor }}>
@@ -132,14 +132,15 @@ function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marquee
 
   return (
     <div className="menu__item" ref={itemRef} style={{ borderColor }}>
-      <div
+      <a
         className="menu__item-link"
+        href={link}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}
       >
         {text}
-      </div>
+      </a>
       <div className="marquee" ref={marqueeRef} style={{ backgroundColor: marqueeBgColor }}>
         <div className="marquee__inner-wrap">
           <div className="marquee__inner" ref={marqueeInnerRef} aria-hidden="true">

@@ -1,0 +1,43 @@
+/* ─── CardSwap container ───────────────────────────── */
+.card-swap-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  perspective: 900px;
+  overflow: visible;
+}
+
+/* ─── individual card ──────────────────────────────── */
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ─── responsive ───────────────────────────────────── */
+@media (max-width: 1200px) {
+  .card-swap-container {
+    transform: scale(0.8);
+    transform-origin: bottom right;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-swap-container {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    transform: scale(0.7);
+    margin: 40px auto 0;
+    perspective: 600px;
+    transform-origin: center;
+  }
+}

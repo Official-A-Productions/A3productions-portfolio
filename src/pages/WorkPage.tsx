@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import CardSwap, { Card } from '../components/CardSwap';
 
 /* ─── reveal ──────────────────────────────── */
 const REVEAL_UP = {
@@ -151,25 +152,73 @@ function CascadingCards() {
 /* ─── work page ───────────────────────────── */
 export default function WorkPage() {
   return (
-    <div className="pt-0">
-      {/* Hero */}
-      <section className="relative pt-40 pb-16 px-8 md:px-16 bg-[#f4f4f4] border-b border-gray-200">
-        <Reveal variant={REVEAL_LEFT}>
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-4 font-sans">Selected Work</p>
-          <h1 className="text-6xl md:text-9xl font-classic uppercase leading-none tracking-tight text-black">
-            Our<br /><span className="text-gray-400">Work</span>
-          </h1>
-        </Reveal>
-        <Reveal delay={200}>
-          <p className="mt-8 text-xl md:text-2xl font-classic italic text-gray-600 max-w-xl">
-            A curated collection of products built to last.
-          </p>
-        </Reveal>
-      </section>
+    <div className="pt-0 bg-[#f4f4f4]">
+      {/* ══ WORK HERO — CardSwap section ══ */}
+      <section className="relative overflow-hidden border-b border-gray-200" style={{ minHeight: '100vh' }}>
+        {/* Left text */}
+        <div className="relative z-10 pt-40 pb-32 px-8 md:px-16 max-w-xl">
+          <Reveal variant={REVEAL_LEFT}>
+            <p className="text-[10px] uppercase tracking-[0.35em] text-gray-500 mb-5">Selected Work</p>
+            <h1 className="text-6xl md:text-8xl font-classic uppercase text-black leading-[0.88] tracking-tight mb-6">
+              Our<br />
+              <span className="text-gray-400">Work.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={150}>
+            <p className="text-gray-600 font-classic italic text-xl md:text-2xl mb-10 leading-relaxed">
+              A curated collection of products built to last.
+            </p>
+          </Reveal>
+        </div>
 
-      {/* Cascading card stack */}
-      <section className="relative bg-[#f4f4f4]">
-        <CascadingCards />
+        {/* CardSwap — absolutely positioned bottom-right */}
+        <CardSwap
+          width={480}
+          height={320}
+          cardDistance={55}
+          verticalDistance={65}
+          delay={4000}
+          pauseOnHover={true}
+          skewAmount={5}
+          easing="elastic"
+        >
+          {projects.map((p) => (
+            <Card key={p.num} style={{ padding: 0, overflow: 'hidden', cursor: 'default' }}>
+              <div className="relative w-full h-full">
+                {/* Image */}
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ filter: 'brightness(0.45) grayscale(0.3)' }}
+                />
+                {/* Top tag */}
+                <div className="absolute top-4 left-4 z-10">
+                  <span className="text-[9px] tracking-[0.28em] uppercase text-white/80 bg-white/10 border border-white/20 rounded-full px-3 py-1.5 backdrop-blur-sm">
+                    {p.category}
+                  </span>
+                </div>
+                {/* Number watermark */}
+                <div
+                  className="absolute top-2 right-5 font-classic text-white/10 select-none leading-none"
+                  style={{ fontSize: 'clamp(60px, 8vw, 110px)' }}
+                >
+                  {p.num}
+                </div>
+                {/* Bottom info */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-10">
+                  <p className="text-gray-500 text-[10px] font-mono uppercase tracking-widest mb-1.5">{p.year}</p>
+                  <h3 className="text-2xl md:text-3xl font-classic uppercase text-white leading-tight">{p.title}</h3>
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {p.tags.map((t) => (
+                      <span key={t} className="text-[8px] tracking-[0.2em] uppercase text-white/40 border border-white/15 rounded-full px-2 py-0.5">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </CardSwap>
       </section>
 
       {/* Grid of additional work */}

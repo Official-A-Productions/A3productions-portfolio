@@ -7,9 +7,11 @@ import {
   useInView,
   useMotionValueEvent,
 } from 'framer-motion';
-import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import Crosshair from './components/Crosshair';
 import Cubes from './components/Cubes';
+import CardSwap, { Card } from './components/CardSwap';
+import FlowingMenu from './components/FlowingMenu';
 
 /* ─── section blur wrapper ─────────────────────────── */
 
@@ -201,6 +203,13 @@ const projects = [
     year: '2024',
     image: 'https://images.pexels.com/photos/3585088/pexels-photo-3585088.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
   },
+];
+
+const services = [
+  { title: 'Web Products' },
+  { title: 'AI Systems' },
+  { title: 'Design Systems' },
+  { title: 'Growth Engineering' },
 ];
 
 const stats = [
@@ -521,23 +530,76 @@ export default function App() {
       {/* ══ HERO ══ */}
       <Hero />
 
-      {/* ══ WORK TEASER ══ */}
-      <section id="work" className="relative bg-[#f4f4f4]">
-        <div className="py-20 px-8 md:px-16 flex items-end justify-between border-t border-gray-200">
-          <Reveal variant={REVEAL_LEFT} delay={0}>
-            <h2 className="text-6xl md:text-8xl font-classic uppercase tracking-tight leading-none text-gray-400">
-              Work
+      {/* ══ WORK — CardSwap section ══ */}
+      <section id="work" className="relative bg-[#f4f4f4] overflow-hidden border-t border-gray-200" style={{ minHeight: '100vh' }}>
+        {/* Left text */}
+        <div className="relative z-10 pt-40 pb-32 px-8 md:px-16 max-w-xl">
+          <Reveal variant={REVEAL_LEFT}>
+            <p className="text-[10px] uppercase tracking-[0.35em] text-gray-500 mb-5">Selected Work</p>
+            <h2 className="text-6xl md:text-8xl font-classic uppercase text-black leading-[0.88] tracking-tight mb-6">
+              Work that<br />
+              <span className="text-gray-400">endures.</span>
             </h2>
           </Reveal>
-          <Reveal delay={100}>
-            <a href="/work" className="group inline-flex items-center gap-2 text-sm uppercase tracking-widest text-gray-500 hover:text-black transition-colors duration-300">
-              View all
-              <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          <Reveal delay={150}>
+            <p className="text-gray-600 font-classic italic text-xl md:text-2xl mb-10 leading-relaxed">
+              Products engineered to scale and age like architecture.
+            </p>
+            <a href="/work" className="group inline-flex items-center gap-3 text-black border-b border-gray-300 pb-2 text-[11px] uppercase tracking-widest hover:border-black transition-colors duration-300">
+              View all projects
+              <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </a>
           </Reveal>
         </div>
 
-        <CascadingCards />
+        {/* CardSwap — absolutely positioned bottom-right */}
+        <CardSwap
+          width={480}
+          height={320}
+          cardDistance={55}
+          verticalDistance={65}
+          delay={4000}
+          pauseOnHover={true}
+          skewAmount={5}
+          easing="elastic"
+        >
+          {projects.map((p) => (
+            <Card key={p.num} style={{ padding: 0, overflow: 'hidden', cursor: 'default' }}>
+              <div className="relative w-full h-full">
+                {/* Image */}
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ filter: 'brightness(0.45) grayscale(0.3)' }}
+                />
+                {/* Top tag */}
+                <div className="absolute top-4 left-4 z-10">
+                  <span className="text-[9px] tracking-[0.28em] uppercase text-white/80 bg-white/10 border border-white/20 rounded-full px-3 py-1.5 backdrop-blur-sm">
+                    {p.category}
+                  </span>
+                </div>
+                {/* Number watermark */}
+                <div
+                  className="absolute top-2 right-5 font-classic text-white/10 select-none leading-none"
+                  style={{ fontSize: 'clamp(60px, 8vw, 110px)' }}
+                >
+                  {p.num}
+                </div>
+                {/* Bottom info */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-10">
+                  <p className="text-gray-500 text-[10px] font-mono uppercase tracking-widest mb-1.5">{p.year}</p>
+                  <h3 className="text-2xl md:text-3xl font-classic uppercase text-white leading-tight">{p.title}</h3>
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {p.tags.map((t) => (
+                      <span key={t} className="text-[8px] tracking-[0.2em] uppercase text-white/40 border border-white/15 rounded-full px-2 py-0.5">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </CardSwap>
       </section>
 
       {/* ══ STUDIO / A³ COLLECTION ══ */}
@@ -570,6 +632,24 @@ export default function App() {
           </div>
         </div>
       </SectionBlur>
+
+      {/* ══ SERVICES FLOWING MENU ══ */}
+      <section className="relative overflow-hidden border-t border-gray-200">
+        <div style={{ height: '500px', width: '100%' }}>
+          <FlowingMenu
+            items={services.map((s, i) => ({
+              link: '#',
+              text: s.title,
+              image: `https://picsum.photos/600/400?random=${i + 10}`,
+            }))}
+            bgColor="#f4f4f4"
+            textColor="#000"
+            marqueeBgColor="#000"
+            marqueeTextColor="#fff"
+            borderColor="rgba(0,0,0,0.1)"
+          />
+        </div>
+      </section>
 
       {/* ══ CTA ══ */}
       <section className="relative py-32 px-8 md:px-16 overflow-hidden bg-[#f4f4f4] text-black border-t border-gray-200">
