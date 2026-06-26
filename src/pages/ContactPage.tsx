@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowUpRight, Mail, MapPin, Clock } from 'lucide-react';
+import { ArrowUpRight, Mail, MapPin, Clock, Phone } from 'lucide-react';
 import { Globe3D, GlobeMarker } from '../components/ui/3d-globe';
 
 /* ─── reveal ──────────────────────────────── */
@@ -54,12 +54,41 @@ export default function ContactPage() {
   const [formState, setFormState] = useState({ name: '', email: '', project: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/officialA3Productions@gmail.com", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          project: formState.project,
+          message: formState.message,
+          _subject: `New Inquiry from ${formState.name} on A3 Productions`
+        })
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        alert("There was an error sending your message. Please try again or email us directly.");
+      }
+    } catch (error) {
+      alert("There was an error sending your message. Please try again or email us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const inputClass = "w-full bg-transparent border-b border-gray-300 focus:border-black outline-none py-3 text-black font-classic text-lg placeholder-gray-400 transition-colors duration-300";
+  const inputClass = "w-full bg-transparent border-b border-gray-300 focus:border-black outline-none py-3 text-black font-classic text-lg placeholder-gray-400 transition-colors duration-300 disabled:opacity-50";
 
   return (
     <div className="pt-0 bg-[#f4f4f4]">
@@ -79,7 +108,7 @@ export default function ContactPage() {
               </p>
             </Reveal>
           </div>
-          
+
           <div className="relative w-full aspect-square max-h-[500px] flex items-center justify-center mt-8 lg:mt-0 px-4 md:px-0">
             <Reveal delay={400} className="w-full h-full relative flex items-center justify-center">
               <div className="w-full h-full max-w-[400px] lg:max-w-none mx-auto flex items-center justify-center">
@@ -112,7 +141,16 @@ export default function ContactPage() {
                   <Mail size={18} className="text-gray-400 mt-1 shrink-0" />
                   <div>
                     <p className="text-xs uppercase tracking-widest text-gray-500 font-sans mb-1">Email</p>
-                    <a href="mailto:hello@a3productions.com" className="text-xl font-classic text-black hover:text-gray-600 transition-colors">hello@a3productions.com</a>
+                    <a href="mailto:officialA3Productions@gmail.com" className="text-xl font-classic text-black hover:text-gray-600 transition-colors">officialA3Productions@gmail.com</a>
+                  </div>
+                </div>
+              </Reveal>
+              <Reveal delay={125}>
+                <div className="flex items-start gap-4">
+                  <Phone size={18} className="text-gray-400 mt-1 shrink-0" />
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-gray-500 font-sans mb-1">Phone</p>
+                    <a href="tel:+918447752642" className="text-xl font-classic text-black hover:text-gray-600 transition-colors">+91 8447752642</a>
                   </div>
                 </div>
               </Reveal>
@@ -121,7 +159,7 @@ export default function ContactPage() {
                   <MapPin size={18} className="text-gray-400 mt-1 shrink-0" />
                   <div>
                     <p className="text-xs uppercase tracking-widest text-gray-500 font-sans mb-1">Location</p>
-                    <p className="text-xl font-classic text-black">San Francisco, CA</p>
+                    <p className="text-xl font-classic text-black">Greater Noida, Uttar Pradesh, India</p>
                     <p className="text-sm font-classic italic text-gray-500">Available globally for remote engagements</p>
                   </div>
                 </div>
@@ -165,18 +203,21 @@ export default function ContactPage() {
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-gray-500 font-sans mb-2">Your Name</label>
                   <input type="text" required placeholder="Jane Smith" value={formState.name}
+                    disabled={isSubmitting}
                     onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                     className={inputClass} />
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-gray-500 font-sans mb-2">Email Address</label>
                   <input type="email" required placeholder="jane@company.com" value={formState.email}
+                    disabled={isSubmitting}
                     onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                     className={inputClass} />
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-gray-500 font-sans mb-2">Project Type</label>
                   <input type="text" placeholder="e.g. SaaS platform, AI tool..." value={formState.project}
+                    disabled={isSubmitting}
                     onChange={(e) => setFormState({ ...formState, project: e.target.value })}
                     className={inputClass} />
                 </div>
@@ -184,12 +225,13 @@ export default function ContactPage() {
                   <label className="block text-xs uppercase tracking-widest text-gray-500 font-sans mb-2">Tell Us More</label>
                   <textarea required rows={4} placeholder="Describe your project, timeline, and goals..."
                     value={formState.message}
+                    disabled={isSubmitting}
                     onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                     className={`${inputClass} resize-none`} />
                 </div>
-                <button type="submit"
-                  className="group inline-flex items-center gap-3 bg-black text-white px-8 py-4 rounded-full font-semibold text-sm tracking-wide uppercase hover:bg-gray-800 active:scale-95 transition-all duration-300">
-                  <span>Send Message</span>
+                <button type="submit" disabled={isSubmitting}
+                  className="group inline-flex items-center gap-3 bg-black text-white px-8 py-4 rounded-full font-semibold text-sm tracking-wide uppercase hover:bg-gray-800 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
                   <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </button>
               </form>

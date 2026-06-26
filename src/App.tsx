@@ -12,6 +12,8 @@ import Crosshair from './components/Crosshair';
 import Cubes from './components/Cubes';
 import CardSwap, { Card } from './components/CardSwap';
 import FlowingMenu from './components/FlowingMenu';
+import MobileHero from './components/MobileHero';
+import ServiceModal, { type ServiceDetail } from './components/ServiceModal';
 
 /* ─── section blur wrapper ─────────────────────────── */
 
@@ -205,11 +207,59 @@ const projects = [
   },
 ];
 
-const services = [
-  { title: 'Web Products' },
-  { title: 'AI Systems' },
-  { title: 'Design Systems' },
-  { title: 'Growth Engineering' },
+const services: ServiceDetail[] = [
+  {
+    title: 'Web Products',
+    subtitle: 'Full-Stack Web Engineering',
+    description: 'Full-stack web applications engineered for scale, speed, and long-term maintainability. From consumer SaaS to enterprise dashboards, we build products that perform.',
+    tags: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'TypeScript', 'AWS'],
+    cta: 'Start a web project',
+    images: [
+      'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=600',
+    ],
+  },
+  {
+    title: 'AI Systems',
+    subtitle: 'Intelligent Automation',
+    description: 'Custom LLM integrations, automation pipelines, and intelligent data workflows. We build AI that fits your business logic, not the other way around.',
+    tags: ['LLMs', 'RAG', 'OpenAI', 'LangChain', 'Python', 'Vector DBs'],
+    cta: 'Explore AI solutions',
+    images: [
+      'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?auto=compress&cs=tinysrgb&w=600',
+    ],
+  },
+  {
+    title: 'Design Systems',
+    subtitle: 'Visual & Component Architecture',
+    description: 'Scalable design languages and component libraries that maintain visual consistency across every touchpoint. From tokens to production-ready UI.',
+    tags: ['Figma', 'Storybook', 'Tailwind', 'Radix UI', 'Motion', 'WCAG'],
+    cta: 'Build your design system',
+    images: [
+      'https://images.pexels.com/photos/196645/pexels-photo-196645.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/326503/pexels-photo-326503.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=600',
+    ],
+  },
+  {
+    title: 'Growth Engineering',
+    subtitle: 'Performance & Revenue Optimization',
+    description: 'Data-driven engineering focused on conversion, retention, and revenue. We instrument, experiment, and optimize until the numbers compound.',
+    tags: ['Analytics', 'A/B Testing', 'SEO', 'CRO', 'CDP', 'Event Tracking'],
+    cta: 'Scale your growth',
+    images: [
+      'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/159888/pexels-photo-159888.jpeg?auto=compress&cs=tinysrgb&w=600',
+    ],
+  },
 ];
 
 const stats = [
@@ -498,17 +548,8 @@ function Hero() {
 
   return (
     <>
-      {/* Mobile Fallback Hero */}
-      <div className="md:hidden flex flex-col items-center justify-center min-h-[90vh] px-8 pt-28 pb-12 bg-[#f4f4f4]">
-        <img 
-          src="/frames/frame_274_delay-0.043s.png" 
-          alt="Mac" 
-          className="w-full h-auto max-w-sm object-contain mix-blend-multiply mb-12" 
-        />
-        <h1 className="text-6xl font-black uppercase tracking-tighter text-center leading-[0.85] text-black">
-          We<br />Scale<br />Systems.
-        </h1>
-      </div>
+      {/* Mobile Crazy Hero */}
+      <MobileHero />
 
       {/* Desktop Canvas Animation */}
       <div ref={containerRef} className="hidden md:block relative w-full h-[350vh] bg-[#f4f4f4]">
@@ -523,9 +564,14 @@ function Hero() {
 /* ─── home page ─────────────────────────────────────── */
 
 export default function App() {
+  const [activeService, setActiveService] = useState<ServiceDetail | null>(null);
+
   return (
     <>
       <Crosshair color="#888" />
+      
+      {/* Service detail modal */}
+      <ServiceModal service={activeService} onClose={() => setActiveService(null)} />
 
       {/* ══ HERO ══ */}
       <Hero />
@@ -554,10 +600,10 @@ export default function App() {
 
         {/* CardSwap — absolutely positioned bottom-right */}
         <CardSwap
-          width={480}
-          height={320}
-          cardDistance={55}
-          verticalDistance={65}
+          width={600}
+          height={400}
+          cardDistance={65}
+          verticalDistance={75}
           delay={4000}
           pauseOnHover={true}
           skewAmount={5}
@@ -604,8 +650,8 @@ export default function App() {
 
       {/* ══ STUDIO / A³ COLLECTION ══ */}
       <SectionBlur id="studio" className="relative py-32 px-8 md:px-16 border-t border-gray-200 overflow-hidden bg-[#f4f4f4]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center relative z-10">
-          <div className="order-2 md:order-1">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-20 items-center relative z-10">
+          <div>
             <Reveal variant={REVEAL_LEFT} delay={0}>
               <h2 className="text-5xl md:text-7xl font-classic uppercase leading-tight tracking-tight mb-6 text-black">
                 THE A³ COLLECTION:<br />
@@ -623,9 +669,9 @@ export default function App() {
             </Reveal>
           </div>
 
-          <div className="order-1 md:order-2 flex justify-center w-full">
-            <Reveal variant={REVEAL_RIGHT} delay={100}>
-              <div style={{ width: '100%', height: '480px' }}>
+          <div className="w-full">
+            <Reveal variant={REVEAL_RIGHT} delay={100} className="w-full">
+              <div className="w-full aspect-square max-w-[480px] mx-auto overflow-hidden">
                 <Cubes gridSize={8} faceColor="#f4f4f4" borderStyle="1px solid #000" rippleColor="#000" autoAnimate={true} rippleOnClick={true} />
               </div>
             </Reveal>
@@ -640,7 +686,8 @@ export default function App() {
             items={services.map((s, i) => ({
               link: '#',
               text: s.title,
-              image: `https://picsum.photos/600/400?random=${i + 10}`,
+              image: s.images[0],
+              onClick: () => setActiveService(s),
             }))}
             bgColor="#f4f4f4"
             textColor="#000"
@@ -665,7 +712,7 @@ export default function App() {
                 <span>Start a project</span>
                 <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
-              <span className="text-sm text-gray-600 font-classic">hello@a3productions.io</span>
+              <span className="text-sm text-gray-600 font-classic">officialA3Productions@gmail.com</span>
             </div>
           </Reveal>
         </div>
