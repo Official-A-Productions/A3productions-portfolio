@@ -51,7 +51,7 @@ const noidaMarker: GlobeMarker[] = [
 ];
 
 export default function ContactPage() {
-  const [formState, setFormState] = useState({ name: '', email: '', project: '', message: '' });
+  const [formState, setFormState] = useState({ name: '', email: '', project: '', budget: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,6 +71,7 @@ export default function ContactPage() {
           name: formState.name,
           email: formState.email,
           project: formState.project,
+          budget: formState.budget,
           message: formState.message,
           _subject: `New Inquiry from ${formState.name} on A3 Productions`
         })
@@ -219,6 +220,13 @@ export default function ContactPage() {
                   <input type="text" placeholder="e.g. SaaS platform, AI tool..." value={formState.project}
                     disabled={isSubmitting}
                     onChange={(e) => setFormState({ ...formState, project: e.target.value })}
+                    className={inputClass} />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-widest text-gray-500 font-sans mb-2">Estimated Budget</label>
+                  <input type="text" placeholder="e.g. ₹1L – ₹5L, $10K, Let's discuss..." value={formState.budget}
+                    disabled={isSubmitting}
+                    onChange={(e) => setFormState({ ...formState, budget: e.target.value })}
                     className={inputClass} />
                 </div>
                 <div>
