@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   motion,
   useScroll,
@@ -609,6 +610,32 @@ function Hero() {
             </div>
           </motion.div>
         </div>
+        {/* Scroll indicator — bottom right, fades as user scrolls */}
+        <motion.div
+          className="absolute bottom-10 right-8 md:right-16 z-20 flex flex-col items-center gap-2 pointer-events-none"
+          style={{ opacity: textOpacity }}
+        >
+          <div className="relative w-11 h-11 flex items-center justify-center">
+            {/* outer pulsing ring */}
+            <motion.div
+              className="absolute inset-0 rounded-full border border-black/25"
+              animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0, 0.6] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            {/* static ring */}
+            <div className="absolute inset-0 rounded-full border border-black/30" />
+            {/* bouncing arrow */}
+            <motion.svg
+              width="14" height="14" viewBox="0 0 14 14" fill="none"
+              animate={{ y: [0, 3, 0] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <path d="M7 1v12M2 8l5 5 5-5" stroke="black" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+            </motion.svg>
+          </div>
+          <span className="text-[7px] uppercase tracking-[0.35em] text-black/40 font-sans">Scroll</span>
+        </motion.div>
+
         {/* Gradient fade to seamlessly transition into the next section */}
         <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-[#f4f4f4] to-transparent pointer-events-none z-10" />
       </div>
@@ -644,10 +671,10 @@ export default function App() {
             <p className="text-gray-600 font-classic italic text-xl md:text-2xl mb-10 leading-relaxed">
               Products engineered to scale and age like architecture.
             </p>
-            <a href="/work" className="group inline-flex items-center gap-3 text-black border-b border-gray-300 pb-2 text-[11px] uppercase tracking-widest hover:border-black transition-colors duration-300">
+            <Link to="/work" className="group inline-flex items-center gap-3 text-black border-b border-gray-300 pb-2 text-[11px] uppercase tracking-widest hover:border-black transition-colors duration-300">
               View all projects
               <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </a>
+            </Link>
           </Reveal>
         </div>
 

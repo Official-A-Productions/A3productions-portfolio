@@ -1,6 +1,5 @@
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import PrismaticBurst from './PrismaticBurst';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function MobileHero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,113 +9,77 @@ export default function MobileHero() {
     offset: ['start start', 'end start'],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-
-  // "we" — flies top-left + fades out
-  const weX = useTransform(smoothProgress, [0, 1], [0, -160]);
-  const weY = useTransform(smoothProgress, [0, 1], [0, -180]);
-  const weRotate = useTransform(smoothProgress, [0, 1], [0, -18]);
-  const weScale = useTransform(smoothProgress, [0, 1], [1, 1.8]);
-  const weOpacity = useTransform(smoothProgress, [0, 0.5, 0.75], [1, 0.3, 0]);
-
-  // "scale" — flies right + fades out
-  const scaleX = useTransform(smoothProgress, [0, 1], [0, 180]);
-  const scaleY = useTransform(smoothProgress, [0, 1], [0, -60]);
-  const scaleRotate = useTransform(smoothProgress, [0, 1], [0, 12]);
-  const scaleScale = useTransform(smoothProgress, [0, 1], [1, 2.2]);
-  const scaleOpacity = useTransform(smoothProgress, [0, 0.4, 0.65], [1, 0.3, 0]);
-
-  // "systems." — flies bottom-left + fades out
-  const systemsX = useTransform(smoothProgress, [0, 1], [0, -80]);
-  const systemsY = useTransform(smoothProgress, [0, 1], [0, 220]);
-  const systemsRotate = useTransform(smoothProgress, [0, 1], [0, -8]);
-  const systemsScale = useTransform(smoothProgress, [0, 1], [1, 1.6]);
-  const systemsOpacity = useTransform(smoothProgress, [0, 0.6, 0.85], [1, 0.3, 0]);
-
-  // Subtitle
-  const subtitleOpacity = useTransform(smoothProgress, [0, 0.25, 0.5], [1, 0.4, 0]);
-
-  // Container fades out last
-  const containerOpacity = useTransform(smoothProgress, [0.6, 1], [1, 0]);
+  // Whole section slides up and fades as user scrolls past — subtle parallax exit only
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1, 0]);
 
   return (
-    <div ref={containerRef} className="md:hidden h-[220vh] w-full relative">
+    <div ref={containerRef} className="md:hidden relative w-full" style={{ height: '100vh' }}>
       <motion.div
-        className="sticky top-0 left-0 w-full h-screen overflow-hidden bg-black"
-        style={{ opacity: containerOpacity }}
+        className="sticky top-0 left-0 w-full h-screen overflow-hidden"
+        style={{ opacity }}
       >
-        {/* PrismaticBurst WebGL background */}
-        <div className="absolute inset-0 z-0">
-          <PrismaticBurst
-            animationType="rotate3d"
-            intensity={2}
-            speed={0.4}
-            distort={0.8}
-            paused={false}
-            offset={{ x: 0, y: 0 }}
-            hoverDampness={0}
-            rayCount={0}
-            mixBlendMode="lighten"
-            colors={['#ff007a', '#4d3dff', '#00cfff', '#a855f7']}
+        {/* Background image */}
+        <motion.div className="absolute inset-0 z-0" style={{ y }}>
+          <img
+            src="/background.png"
+            alt=""
+            className="w-full h-full object-cover"
+            draggable={false}
           />
-        </div>
+        </motion.div>
 
-        {/* Vignette */}
+        {/* Vignette overlay */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 100%)',
+            background: 'radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.5) 100%)',
           }}
         />
 
-        {/* Text content */}
-        <div className="relative z-20 flex flex-col items-start justify-center h-full px-8 pt-20">
-          <motion.h1
-            className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white will-change-transform"
-            style={{ x: weX, y: weY, rotate: weRotate, scale: weScale, opacity: weOpacity }}
-          >
+        {/* Gradient transition at bottom — blends into page bg */}
+        <div
+          className="absolute bottom-0 left-0 w-full z-20 pointer-events-none"
+          style={{
+            height: '45%',
+            background:
+              'linear-gradient(to bottom, transparent 0%, rgba(20,10,30,0.3) 30%, rgba(30,15,40,0.7) 55%, rgba(244,244,244,0.92) 85%, #f4f4f4 100%)',
+          }}
+        />
+
+        {/* Text — fully static, no scroll animations */}
+        <div className="relative z-30 flex flex-col items-start justify-center h-full px-8 pt-20 pb-32">
+          <h1 className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white">
             we
-          </motion.h1>
-          <motion.h1
-            className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white will-change-transform"
-            style={{ x: scaleX, y: scaleY, rotate: scaleRotate, scale: scaleScale, opacity: scaleOpacity }}
-          >
+          </h1>
+          <h1 className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white">
             scale
-          </motion.h1>
-          <motion.h1
-            className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white will-change-transform"
-            style={{ x: systemsX, y: systemsY, rotate: systemsRotate, scale: systemsScale, opacity: systemsOpacity }}
-          >
+          </h1>
+          <h1 className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white">
             systems.
-          </motion.h1>
+          </h1>
 
           {/* Subtitle */}
-          <motion.div
-            className="mt-10 max-w-[88%]"
-            style={{ opacity: subtitleOpacity }}
-          >
-            <p className="text-[15px] font-sans font-medium text-white leading-relaxed tracking-wide">
-              Premier systems architecture & product engineering studio.
+          <div className="mt-10 max-w-[88%]">
+            <p className="text-[15px] font-sans font-medium text-white/90 leading-relaxed tracking-wide">
+              Premier systems architecture &amp; product engineering studio.
               Building scalable software for companies who{' '}
               <span className="italic text-white/60">refuse to settle.</span>
             </p>
             <div className="mt-5 flex items-center gap-3">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
-              <span className="text-[10px] uppercase tracking-[0.35em] text-white/35 font-sans">
+              <span className="text-[10px] uppercase tracking-[0.35em] text-white/40 font-sans">
                 Available for new projects
               </span>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-10 left-8 flex flex-col items-start gap-2"
-          style={{ opacity: subtitleOpacity }}
-        >
+        <div className="absolute bottom-8 left-8 z-30 flex flex-col items-start gap-2">
           <span className="text-[9px] uppercase tracking-[0.45em] text-white/40 font-sans">Scroll</span>
-          <div className="w-px h-10 bg-gradient-to-b from-white/40 to-transparent" />
-        </motion.div>
+          <div className="w-px h-8 bg-gradient-to-b from-white/30 to-transparent" />
+        </div>
       </motion.div>
     </div>
   );
