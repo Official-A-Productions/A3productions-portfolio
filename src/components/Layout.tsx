@@ -244,10 +244,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div>
             <h4 className="text-sm font-sans text-gray-500 mb-6 uppercase tracking-widest">Socials</h4>
             <ul className="space-y-4">
-              {['Twitter', 'Instagram', 'LinkedIn', 'Dribbble'].map((social) => (
-                <li key={social}>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-300 text-lg font-classic">
-                    {social}
+              {[
+                { name: 'Twitter', url: '#' },
+                { name: 'Instagram', url: 'https://www.instagram.com/_a3productions_/' },
+                { name: 'LinkedIn', url: '#' },
+                { name: 'Dribbble', url: '#' }
+              ].map((social) => (
+                <li key={social.name}>
+                  <a href={social.url} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-300 text-lg font-classic">
+                    {social.name}
                   </a>
                 </li>
               ))}

@@ -433,7 +433,7 @@ function CascadeCard({
 
 /* ─── hero ──────────────────────────────────────────── */
 
-const FRAME_COUNT = 275;
+const FRAME_COUNT = 202;
 
 function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -447,8 +447,16 @@ function Hero() {
 
     for (let i = 0; i < FRAME_COUNT; i++) {
       const img = new Image();
+      // Optimize loading by using async decoding and lower priority for later frames
+      img.decoding = 'async';
+      if (i > 10) {
+        img.fetchPriority = 'low';
+      } else {
+        img.fetchPriority = 'high';
+      }
+      
       const paddedIndex = i.toString().padStart(3, '0');
-      img.src = `/frames/frame_${paddedIndex}_delay-0.043s.png`;
+      img.src = `/frames/frame_${paddedIndex}_delay-0.05s.png`;
       img.onload = () => {
         loadedCount++;
         if (loadedCount === FRAME_COUNT) {
@@ -535,6 +543,30 @@ function Hero() {
     requestAnimationFrame(() => renderFrame(frameIndex));
   });
 
+  // Calculate the progress threshold for frame 50
+  const frame50Progress = 50 / FRAME_COUNT;
+  
+  const textOpacity = useTransform(
+    scrollYProgress,
+    [0, frame50Progress * 0.6, frame50Progress, 1],
+    [1, 1, 0, 0],
+    { clamp: true }
+  );
+  
+  const textX = useTransform(
+    scrollYProgress,
+    [0, frame50Progress * 0.6, frame50Progress, 1],
+    [0, 0, -150, -150],
+    { clamp: true }
+  );
+
+  const textFilter = useTransform(
+    scrollYProgress,
+    [0, frame50Progress * 0.6, frame50Progress, 1],
+    ['blur(0px)', 'blur(0px)', 'blur(10px)', 'blur(10px)'],
+    { clamp: true }
+  );
+
   return (
     <>
       {/* Mobile Crazy Hero */}
@@ -544,7 +576,33 @@ function Hero() {
       <div ref={containerRef} className="hidden md:block relative w-full h-[350vh] bg-[#f4f4f4]">
         <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
           <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" />
+          
+          {/* Overlay Text */}
+          <motion.div 
+            className="absolute bottom-8 left-6 md:bottom-16 md:left-16 pointer-events-none"
+            style={{ 
+              opacity: textOpacity,
+              x: textX,
+              filter: textFilter,
+            }}
+          >
+            <h1 className="text-3xl md:text-5xl lg:text-[4rem] font-classic uppercase text-black leading-[0.95] tracking-tight mb-4 drop-shadow-sm">
+              THE A³ COLLECTION:<br />
+              ARCHITECTED FOR<br />
+              EXCELLENCE
+            </h1>
+            <p className="text-black font-sans font-medium text-lg md:text-xl mt-4 mb-5 drop-shadow-sm">
+              Nostalgic craft. Modern precision.
+            </p>
+            <div className="pointer-events-auto w-fit">
+              <MetallicButton to="/studio">
+                Learn More
+              </MetallicButton>
+            </div>
+          </motion.div>
         </div>
+        {/* Gradient fade to seamlessly transition into the next section */}
+        <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-[#f4f4f4] to-transparent pointer-events-none z-10" />
       </div>
     </>
   );
@@ -566,7 +624,7 @@ export default function App() {
       <Hero />
 
       {/* ══ WORK — CardSwap section ══ */}
-      <section id="work" className="relative bg-[#f4f4f4] overflow-hidden border-t border-gray-200" style={{ minHeight: '100vh' }}>
+      <section id="work" className="relative bg-[#f4f4f4] overflow-hidden border-t border-gray-200 md:border-t-0" style={{ minHeight: '100vh' }}>
         {/* Left text */}
         <div className="relative z-10 pt-40 pb-32 px-8 md:px-16 max-w-xl">
           <Reveal variant={REVEAL_LEFT}>
