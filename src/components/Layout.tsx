@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import Crosshair from './Crosshair';
 
 const NAV_ITEMS = [
   { label: 'Work', href: '/work' },
@@ -82,6 +83,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative bg-[#f4f4f4] text-black overflow-x-clip">
+      {/* Crosshair cursor — shown on all pages */}
+      <Crosshair color="#888" />
+
       {/* Grain */}
       <div className="grain-overlay-light" />
 

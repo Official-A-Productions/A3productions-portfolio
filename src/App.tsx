@@ -8,7 +8,6 @@ import {
   useMotionValueEvent,
 } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import Crosshair from './components/Crosshair';
 import Cubes from './components/Cubes';
 import CardSwap, { Card } from './components/CardSwap';
 import FlowingMenu from './components/FlowingMenu';
@@ -65,6 +64,17 @@ function SectionBlur({
   );
   const regularScale = useSpring(regularRawScale, { stiffness: 80, damping: 22 });
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const blurFilter = useTransform(regularBlur, (v) => `blur(${v}px)`);
+
   if (isFooter) {
     return (
       <motion.div
@@ -78,22 +88,13 @@ function SectionBlur({
     );
   }
 
-  const [isMobile, setIsMobile] = useState(false);
-  
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   return (
     <motion.div
       ref={ref}
       id={id}
       className={className}
       style={{
-        filter: isMobile ? 'none' : useTransform(regularBlur, (v) => `blur(${v}px)`),
+        filter: isMobile ? 'none' : blurFilter,
         opacity: regularOpacity,
         scale: regularScale,
         transformOrigin: 'center center',
@@ -622,8 +623,6 @@ export default function App() {
 
   return (
     <>
-      <Crosshair color="#888" />
-      
       {/* Service detail modal */}
       <ServiceModal service={activeService} onClose={() => setActiveService(null)} />
 
