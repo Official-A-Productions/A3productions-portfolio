@@ -14,6 +14,7 @@ import CardSwap, { Card } from './components/CardSwap';
 import FlowingMenu from './components/FlowingMenu';
 import MobileHero from './components/MobileHero';
 import ServiceModal, { type ServiceDetail } from './components/ServiceModal';
+import MetallicButton from './components/MetallicButton';
 
 /* ─── section blur wrapper ─────────────────────────── */
 
@@ -211,53 +212,41 @@ const services: ServiceDetail[] = [
   {
     title: 'Web Products',
     subtitle: 'Full-Stack Web Engineering',
-    description: 'Full-stack web applications engineered for scale, speed, and long-term maintainability. From consumer SaaS to enterprise dashboards, we build products that perform.',
-    tags: ['React', 'Next.js', 'Node.js', 'PostgreSQL', 'TypeScript', 'AWS'],
+    description: 'Scalable and performant web applications for consumers and enterprises.',
+    tags: ['React', 'Next.js', 'Node.js', 'PostgreSQL'],
     cta: 'Start a web project',
     images: [
       'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=600',
     ],
   },
   {
     title: 'AI Systems',
     subtitle: 'Intelligent Automation',
-    description: 'Custom LLM integrations, automation pipelines, and intelligent data workflows. We build AI that fits your business logic, not the other way around.',
-    tags: ['LLMs', 'RAG', 'OpenAI', 'LangChain', 'Python', 'Vector DBs'],
+    description: 'Custom AI workflows and LLM integrations that fit your business logic.',
+    tags: ['LLMs', 'RAG', 'Python', 'Vector DBs'],
     cta: 'Explore AI solutions',
     images: [
       'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg?auto=compress&cs=tinysrgb&w=600',
     ],
   },
   {
     title: 'Design Systems',
     subtitle: 'Visual & Component Architecture',
-    description: 'Scalable design languages and component libraries that maintain visual consistency across every touchpoint. From tokens to production-ready UI.',
-    tags: ['Figma', 'Storybook', 'Tailwind', 'Radix UI', 'Motion', 'WCAG'],
+    description: 'Scalable design languages to maintain visual consistency everywhere.',
+    tags: ['Figma', 'Storybook', 'Tailwind', 'Motion'],
     cta: 'Build your design system',
     images: [
       'https://images.pexels.com/photos/196645/pexels-photo-196645.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/326503/pexels-photo-326503.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=600',
     ],
   },
   {
     title: 'Growth Engineering',
     subtitle: 'Performance & Revenue Optimization',
-    description: 'Data-driven engineering focused on conversion, retention, and revenue. We instrument, experiment, and optimize until the numbers compound.',
-    tags: ['Analytics', 'A/B Testing', 'SEO', 'CRO', 'CDP', 'Event Tracking'],
+    description: 'Data-driven strategies focused on conversion and retention.',
+    tags: ['Analytics', 'A/B Testing', 'SEO', 'CRO'],
     cta: 'Scale your growth',
     images: [
       'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-      'https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=600',
-      'https://images.pexels.com/photos/159888/pexels-photo-159888.jpeg?auto=compress&cs=tinysrgb&w=600',
     ],
   },
 ];
@@ -708,10 +697,9 @@ export default function App() {
           </Reveal>
           <Reveal delay={150}>
             <div className="flex flex-col sm:flex-row items-center gap-6 mt-12">
-              <a href="/contact" className="group inline-flex items-center gap-3 bg-black text-white px-8 py-4 rounded-full font-semibold text-sm tracking-wide uppercase hover:bg-gray-800 active:scale-95 transition-all duration-300">
-                <span>Start a project</span>
-                <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
+              <MetallicButton to="/contact">
+                Start a project
+              </MetallicButton>
               <span className="text-sm text-gray-600 font-classic">officialA3Productions@gmail.com</span>
             </div>
           </Reveal>

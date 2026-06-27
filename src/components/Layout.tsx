@@ -56,27 +56,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     (c) => `1px solid ${c}`
   );
 
-  // Floating CTA: visible after scrolling past hero, hidden on contact page, hidden in footer
-  const isContactPage = location.pathname === '/contact';
-  const [showFloatingCta, setShowFloatingCta] = useState(false);
-
-  useMotionValueEvent(scrollY, 'change', (latest) => {
-    // On home: hero is ~350vh desktop / 220vh mobile. Show CTA after first viewport.
-    // On other pages: show after 300px.
-    const heroThreshold = isHome
-      ? (window.innerWidth < 768 ? window.innerHeight * 1.5 : window.innerHeight * 1.2)
-      : 300;
-      
-    // Hide when reaching the footer. The footer is ~600px tall.
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    const footerThreshold = Math.max(0, maxScroll - 600);
-    
-    setShowFloatingCta(latest > heroThreshold && latest < footerThreshold);
-  });
-
-  // Reset on page change
+  // Reset scroll on page change
   useEffect(() => {
-    setShowFloatingCta(false);
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
@@ -104,29 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Grain */}
       <div className="grain-overlay-light" />
 
-      {/* ── Floating CTA ── */}
-      <AnimatePresence>
-        {showFloatingCta && !isContactPage && (
-          <motion.div
-            key="floating-cta"
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.9 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-6 right-6 z-40"
-          >
-            <Link
-              to="/contact"
-              className="group flex items-center gap-3 bg-black text-white pl-6 pr-5 py-3.5 rounded-full shadow-xl hover:bg-gray-800 active:scale-95 transition-all duration-300 text-sm font-semibold tracking-wide"
-            >
-              <span>START YOUR PROJECT</span>
-              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
-                <ArrowUpRight size={14} />
-              </span>
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       {/* Full-screen mobile menu overlay */}
       <AnimatePresence>
@@ -194,7 +153,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         animate={{ opacity: showNav ? 1 : 0, y: showNav ? 0 : -16 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         style={{
-          backgroundColor: isHome ? navBg : 'rgba(244,244,244,0.95)',
+          backgroundColor: 'transparent',
           borderBottom: isHome ? navBorderBottom : '1px solid rgba(0,0,0,0.07)',
           pointerEvents: showNav ? 'auto' : 'none',
         } as never}
