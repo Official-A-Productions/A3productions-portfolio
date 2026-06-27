@@ -30,22 +30,22 @@ export default function MobileHero() {
         </motion.div>
 
         {/* Vignette overlay */}
-        <div
+        {/* <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background: 'radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.5) 100%)',
           }}
-        />
+        /> */}
 
         {/* Gradient transition at bottom — blends into page bg */}
-        <div
+        {/* <div
           className="absolute bottom-0 left-0 w-full z-20 pointer-events-none"
           style={{
             height: '45%',
             background:
               'linear-gradient(to bottom, transparent 0%, rgba(20,10,30,0.3) 30%, rgba(30,15,40,0.7) 55%, rgba(244,244,244,0.92) 85%, #f4f4f4 100%)',
           }}
-        />
+        /> */}
 
         {/* Text — fully static, no scroll animations */}
         <div className="relative z-30 flex flex-col items-start justify-center h-full px-8 pt-20 pb-32">
