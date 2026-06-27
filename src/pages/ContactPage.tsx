@@ -35,9 +35,9 @@ const services = [
 ];
 
 const faqs = [
-  { q: 'What is your typical project timeline?', a: 'Most projects run 8–16 weeks from kickoff to launch, depending on scope. We\'ll give you an accurate estimate after our initial discovery call.' },
+  { q: 'What is your typical project timeline?', a: 'Most projects run between 4-8 weeks from kickoff to launch, depending on scope. We\'ll give you an accurate estimate after our initial discovery call.' },
   { q: 'Do you work with early-stage startups?', a: 'Absolutely. We love working with founders from the ground up — especially on products that need strong technical architecture from day one.' },
-  { q: 'What is your minimum engagement?', a: 'We take on projects starting at $15K. For ongoing retainer work, we offer monthly partnerships for product teams that need embedded engineering.' },
+  { q: 'What is your minimum engagement?', a: 'Contact us to discuss solutions and requirements. For ongoing retainer work, we offer monthly partnerships for product teams that need embedded engineering.' },
   { q: 'Can you take over an existing codebase?', a: 'Yes. We\'ve successfully rescued and scaled multiple legacy codebases. We\'ll do a thorough audit before committing to a roadmap.' },
 ];
 

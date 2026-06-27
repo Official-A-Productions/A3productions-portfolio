@@ -31,10 +31,8 @@ function Reveal({ children, variant = REVEAL_UP, delay = 0, className = '' }: {
 }
 
 const stats = [
-  { value: '20+', label: 'Products Shipped' },
-  { value: '200k+', label: 'Users Reached' },
-  { value: '$1M+', label: 'Client Revenue' },
-  { value: '2', label: 'Years Operating' },
+  { value: '5+', label: 'Products Shipped' },
+  { value: '10k+', label: 'Users Reached' },
 ];
 
 const team = [

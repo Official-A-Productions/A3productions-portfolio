@@ -12,37 +12,29 @@ export default function MobileHero() {
 
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
-  // "we" — flies top-left + blurs out
+  // "we" — flies top-left + fades out
   const weX = useTransform(smoothProgress, [0, 1], [0, -160]);
   const weY = useTransform(smoothProgress, [0, 1], [0, -180]);
   const weRotate = useTransform(smoothProgress, [0, 1], [0, -18]);
   const weScale = useTransform(smoothProgress, [0, 1], [1, 1.8]);
   const weOpacity = useTransform(smoothProgress, [0, 0.5, 0.75], [1, 0.3, 0]);
-  const weBlur = useTransform(smoothProgress, [0, 0.6], [0, 20]);
-  const weFilter = useTransform(weBlur, (v) => `blur(${v}px)`);
 
-  // "scale" — flies right + blurs out
+  // "scale" — flies right + fades out
   const scaleX = useTransform(smoothProgress, [0, 1], [0, 180]);
   const scaleY = useTransform(smoothProgress, [0, 1], [0, -60]);
   const scaleRotate = useTransform(smoothProgress, [0, 1], [0, 12]);
   const scaleScale = useTransform(smoothProgress, [0, 1], [1, 2.2]);
   const scaleOpacity = useTransform(smoothProgress, [0, 0.4, 0.65], [1, 0.3, 0]);
-  const scaleBlur = useTransform(smoothProgress, [0, 0.5], [0, 20]);
-  const scaleFilter = useTransform(scaleBlur, (v) => `blur(${v}px)`);
 
-  // "systems." — flies bottom-left + blurs out
+  // "systems." — flies bottom-left + fades out
   const systemsX = useTransform(smoothProgress, [0, 1], [0, -80]);
   const systemsY = useTransform(smoothProgress, [0, 1], [0, 220]);
   const systemsRotate = useTransform(smoothProgress, [0, 1], [0, -8]);
   const systemsScale = useTransform(smoothProgress, [0, 1], [1, 1.6]);
   const systemsOpacity = useTransform(smoothProgress, [0, 0.6, 0.85], [1, 0.3, 0]);
-  const systemsBlur = useTransform(smoothProgress, [0, 0.7], [0, 20]);
-  const systemsFilter = useTransform(systemsBlur, (v) => `blur(${v}px)`);
 
   // Subtitle
   const subtitleOpacity = useTransform(smoothProgress, [0, 0.25, 0.5], [1, 0.4, 0]);
-  const subtitleBlur = useTransform(smoothProgress, [0, 0.4], [0, 12]);
-  const subtitleFilter = useTransform(subtitleBlur, (v) => `blur(${v}px)`);
 
   // Container fades out last
   const containerOpacity = useTransform(smoothProgress, [0.6, 1], [1, 0]);
@@ -81,19 +73,19 @@ export default function MobileHero() {
         <div className="relative z-20 flex flex-col items-start justify-center h-full px-8 pt-20">
           <motion.h1
             className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white will-change-transform"
-            style={{ x: weX, y: weY, rotate: weRotate, scale: weScale, opacity: weOpacity, filter: weFilter }}
+            style={{ x: weX, y: weY, rotate: weRotate, scale: weScale, opacity: weOpacity }}
           >
             we
           </motion.h1>
           <motion.h1
             className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white will-change-transform"
-            style={{ x: scaleX, y: scaleY, rotate: scaleRotate, scale: scaleScale, opacity: scaleOpacity, filter: scaleFilter }}
+            style={{ x: scaleX, y: scaleY, rotate: scaleRotate, scale: scaleScale, opacity: scaleOpacity }}
           >
             scale
           </motion.h1>
           <motion.h1
             className="text-[21vw] font-black lowercase leading-[0.82] tracking-[-0.04em] text-white will-change-transform"
-            style={{ x: systemsX, y: systemsY, rotate: systemsRotate, scale: systemsScale, opacity: systemsOpacity, filter: systemsFilter }}
+            style={{ x: systemsX, y: systemsY, rotate: systemsRotate, scale: systemsScale, opacity: systemsOpacity }}
           >
             systems.
           </motion.h1>
@@ -101,7 +93,7 @@ export default function MobileHero() {
           {/* Subtitle */}
           <motion.div
             className="mt-10 max-w-[88%]"
-            style={{ opacity: subtitleOpacity, filter: subtitleFilter }}
+            style={{ opacity: subtitleOpacity }}
           >
             <p className="text-[15px] font-sans font-medium text-white leading-relaxed tracking-wide">
               Premier systems architecture & product engineering studio.

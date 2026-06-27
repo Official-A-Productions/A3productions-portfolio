@@ -78,17 +78,26 @@ function SectionBlur({
     );
   }
 
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <motion.div
       ref={ref}
       id={id}
       className={className}
       style={{
-        filter: useTransform(regularBlur, (v) => `blur(${v}px)`),
+        filter: isMobile ? 'none' : useTransform(regularBlur, (v) => `blur(${v}px)`),
         opacity: regularOpacity,
         scale: regularScale,
         transformOrigin: 'center center',
-        willChange: 'filter, opacity, transform',
+        willChange: isMobile ? 'opacity, transform' : 'filter, opacity, transform',
       }}
     >
       {children}
@@ -252,10 +261,8 @@ const services: ServiceDetail[] = [
 ];
 
 const stats = [
-  { value: '40+', label: 'Products Shipped' },
-  { value: '12M+', label: 'Users Reached' },
-  { value: '$2B+', label: 'Client Revenue' },
-  { value: '6', label: 'Years Operating' },
+  { value: '5+', label: 'Products Shipped' },
+  { value: '10k+', label: 'Users Reached' },
 ];
 
 /* ─── cascading card stack ──────────────────────────── */
