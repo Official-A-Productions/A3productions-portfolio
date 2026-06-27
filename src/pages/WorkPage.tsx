@@ -173,8 +173,8 @@ export default function WorkPage() {
 
         {/* CardSwap — absolutely positioned bottom-right */}
         <CardSwap
-          width={480}
-          height={320}
+          width={720}
+          height={480}
           cardDistance={55}
           verticalDistance={65}
           delay={4000}

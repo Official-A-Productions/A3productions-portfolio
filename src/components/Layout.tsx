@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import StaggeredMenu from './StaggeredMenu';
+import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Work', href: '/work' },
@@ -56,10 +56,136 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     (c) => `1px solid ${c}`
   );
 
+  // Floating CTA: visible after scrolling past hero, hidden on contact page, hidden in footer
+  const isContactPage = location.pathname === '/contact';
+  const [showFloatingCta, setShowFloatingCta] = useState(false);
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    // On home: hero is ~350vh desktop / 220vh mobile. Show CTA after first viewport.
+    // On other pages: show after 300px.
+    const heroThreshold = isHome
+      ? (window.innerWidth < 768 ? window.innerHeight * 1.5 : window.innerHeight * 1.2)
+      : 300;
+      
+    // Hide when reaching the footer. The footer is ~600px tall.
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const footerThreshold = Math.max(0, maxScroll - 600);
+    
+    setShowFloatingCta(latest > heroThreshold && latest < footerThreshold);
+  });
+
+  // Reset on page change
+  useEffect(() => {
+    setShowFloatingCta(false);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // Track if we're inside the mobile hero (black background) section
+  // Mobile hero is 220vh tall — invert logo while in that zone
+  const [logoInverted, setLogoInverted] = useState(isHome);
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    if (!isHome || window.innerWidth >= 768) return;
+    // Hero sticky zone ends around 120vh (leaves enough room for the fade-out)
+    const threshold = window.innerHeight * 1.2;
+    setLogoInverted(latest < threshold);
+  });
+
+  // Also initialise correctly on page load
+  useEffect(() => {
+    if (!isHome) { setLogoInverted(false); return; }
+    if (window.innerWidth < 768) setLogoInverted(window.scrollY < window.innerHeight * 1.2);
+  }, [isHome]);
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="relative bg-[#f4f4f4] text-black overflow-x-clip">
       {/* Grain */}
       <div className="grain-overlay-light" />
+
+      {/* ── Floating CTA ── */}
+      <AnimatePresence>
+        {showFloatingCta && !isContactPage && (
+          <motion.div
+            key="floating-cta"
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.9 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed bottom-6 right-6 z-40"
+          >
+            <Link
+              to="/contact"
+              className="group flex items-center gap-3 bg-black text-white pl-6 pr-5 py-3.5 rounded-full shadow-xl hover:bg-gray-800 active:scale-95 transition-all duration-300 text-sm font-semibold tracking-wide"
+            >
+              <span>START YOUR PROJECT</span>
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
+                <ArrowUpRight size={14} />
+              </span>
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Full-screen mobile menu overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 z-[60] bg-black flex flex-col px-8 pt-24 pb-16"
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="absolute top-5 right-8 w-10 h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+              aria-label="Close menu"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M2 2L18 18M18 2L2 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </button>
+
+            {/* Nav links */}
+            <nav className="flex flex-col gap-2 mt-4">
+              {NAV_ITEMS.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + i * 0.07, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <Link
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-[14vw] font-black uppercase leading-none tracking-tighter text-white hover:text-gray-400 transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+
+            {/* Bottom info */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.4 }}
+              className="mt-auto"
+            >
+              <div className="w-full h-px bg-white/10 mb-8" />
+              <p className="text-[10px] uppercase tracking-[0.35em] text-white/30 font-sans mb-3">Get in touch</p>
+              <a href="mailto:officialA3Productions@gmail.com" className="text-white/70 hover:text-white text-sm font-sans transition-colors">
+                officialA3Productions@gmail.com
+              </a>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* NAV */}
       <motion.nav
@@ -70,19 +196,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         style={{
           backgroundColor: isHome ? navBg : 'rgba(244,244,244,0.95)',
           borderBottom: isHome ? navBorderBottom : '1px solid rgba(0,0,0,0.07)',
-          backdropFilter: 'blur(16px)',
           pointerEvents: showNav ? 'auto' : 'none',
         } as never}
       >
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
+        <Link to="/" className="flex items-center gap-3 group">
           <img
-            src="/image.png"
-            alt="A3 Productions"
-            className="h-7 w-auto object-contain filter invert opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+            src="/Logo.webp"
+            alt="Productions"
+            className={`h-9 w-auto object-contain opacity-80 group-hover:opacity-100 transition-all duration-500 ${logoInverted ? 'filter invert' : ''
+              }`}
           />
-          <span className="hidden sm:block text-[9px] tracking-[0.4em] uppercase text-gray-500 group-hover:text-black transition-colors duration-300">
-            A³ Productions
+          <span className="hidden sm:flex items-center gap-3">
+            <span className="text-gray-300 font-light pb-0.5">|</span>
+            <span className="text-[12px] tracking-[0.3em] uppercase text-gray-500 group-hover:text-black transition-colors duration-300">
+              Productions
+            </span>
           </span>
         </Link>
 
@@ -92,11 +221,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Link
               key={item.label}
               to={item.href}
-              className={`relative text-[10px] tracking-[0.35em] uppercase font-medium transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:transition-all after:duration-300 ${
-                location.pathname === item.href
+              className={`relative text-[10px] tracking-[0.35em] uppercase font-medium transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:transition-all after:duration-300 ${location.pathname === item.href
                   ? 'text-black after:w-full'
                   : 'text-gray-500 hover:text-black after:w-0 hover:after:w-full'
-              }`}
+                }`}
             >
               {item.label}
             </Link>
@@ -104,19 +232,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Mobile hamburger */}
-        <div className="md:hidden">
-          <StaggeredMenu
-            isFixed={true}
-            logoUrl={null}
-            items={NAV_ITEMS.map((n) => ({ label: n.label, link: n.href }))}
-            socialItems={[
-              { label: 'Twitter', link: '#' },
-              { label: 'LinkedIn', link: '#' },
-              { label: 'Dribbble', link: '#' },
-            ]}
-            colors={['#f4f4f4', '#e5e5e5']}
-          />
-        </div>
+        <button
+          className="md:hidden flex flex-col gap-1.5 p-1"
+          onClick={() => setMobileMenuOpen(true)}
+          aria-label="Open menu"
+        >
+          <span className="block w-6 h-0.5 bg-black" />
+          <span className="block w-4 h-0.5 bg-black" />
+        </button>
       </motion.nav>
 
       {children}
@@ -130,12 +253,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               something<br />
               <span className="text-gray-500">iconic.</span>
             </h3>
-            <a
-              href="mailto:hello@a3productions.com"
-              className="text-xl text-gray-400 hover:text-white transition-colors duration-300 border-b border-gray-700 hover:border-white pb-1 inline-block"
-            >
-              hello@a3productions.com
-            </a>
+            <div className="flex flex-col items-start gap-4">
+              <a
+                href="mailto:officialA3Productions@gmail.com"
+                className="text-xl text-gray-400 hover:text-white transition-colors duration-300 border-b border-gray-700 hover:border-white pb-1 inline-block"
+              >
+                officialA3Productions@gmail.com
+              </a>
+              <a
+                href="tel:+918447752642"
+                className="text-xl text-gray-400 hover:text-white transition-colors duration-300 border-b border-gray-700 hover:border-white pb-1 inline-block"
+              >
+                +91 8447752642
+              </a>
+            </div>
           </div>
 
           <div>
@@ -170,7 +301,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             <span>Operating from</span>
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-gray-300">San Francisco, CA</span>
+            <span className="text-gray-300">Greater Noida, Uttar Pradesh, India</span>
           </div>
         </div>
       </footer>

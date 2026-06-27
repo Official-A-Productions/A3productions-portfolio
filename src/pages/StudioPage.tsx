@@ -31,17 +31,16 @@ function Reveal({ children, variant = REVEAL_UP, delay = 0, className = '' }: {
 }
 
 const stats = [
-  { value: '40+', label: 'Products Shipped' },
-  { value: '12M+', label: 'Users Reached' },
-  { value: '$2B+', label: 'Client Revenue' },
-  { value: '6', label: 'Years Operating' },
+  { value: '20+', label: 'Products Shipped' },
+  { value: '200k+', label: 'Users Reached' },
+  { value: '$1M+', label: 'Client Revenue' },
+  { value: '2', label: 'Years Operating' },
 ];
 
 const team = [
-  { name: 'Aryan Shah', role: 'Founder & CEO', specialty: 'Systems Architecture' },
-  { name: 'Riya Kapoor', role: 'Head of Design', specialty: 'Visual Systems' },
-  { name: 'Emeka Obi', role: 'Lead Engineer', specialty: 'Full-Stack & AI' },
-  { name: 'Sofia Morales', role: 'Product Strategist', specialty: 'GTM & Growth' },
+  { name: 'Aryan', role: 'Founder & CEO', specialty: 'Systems Architecture' },
+  { name: 'Ashish Singh', role: 'Head of Design', specialty: 'Visual Systems' },
+  { name: 'Ankit Singh', role: 'Lead Engineer', specialty: 'Full-Stack & AI' },
 ];
 
 const values = [
