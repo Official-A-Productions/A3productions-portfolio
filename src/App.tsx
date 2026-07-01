@@ -609,32 +609,73 @@ function Hero() {
               </MetallicButton>
             </div>
           </motion.div>
+          {/* Classy rotating badge — covers the canvas watermark, bottom right */}
+          <motion.div
+            className="absolute bottom-6 right-16 md:bottom-8 md:right-20 z-20 pointer-events-none flex items-center justify-center"
+            style={{ opacity: textOpacity }}
+          >
+            {/* Outer frosted glass ring */}
+            <div className="relative w-24 h-24 md:w-28 md:h-28 flex items-center justify-center">
+
+              {/* Rotating circular text ring */}
+              <div className="absolute inset-0 animate-spin-slow">
+                <svg viewBox="0 0 112 112" className="w-full h-full" aria-hidden="true">
+                  <defs>
+                    <path
+                      id="badge-circle"
+                      d="M 56,56 m -42,0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0"
+                    />
+                  </defs>
+                  <text
+                    style={{
+                      fontSize: '8.2px',
+                      letterSpacing: '0.22em',
+                      textTransform: 'uppercase',
+                      fontFamily: '"EB Garamond", serif',
+                      fontWeight: 700,
+                      fill: '#000000',
+                    }}
+                  >
+                    <textPath href="#badge-circle" startOffset="0%">
+                      A³ Productions · Here For Excellence ·&nbsp;
+                    </textPath>
+                  </text>
+                </svg>
+              </div>
+
+              {/* Inner circle backdrop */}
+              <div
+                className="absolute rounded-full border border-black/20"
+                style={{
+                  inset: '18px',
+                  background: 'rgba(244,244,244,0.85)',
+                  backdropFilter: 'blur(6px)',
+                  WebkitBackdropFilter: 'blur(6px)',
+                }}
+              />
+
+              {/* Bouncing down arrow in center */}
+              <motion.svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                className="relative z-10"
+                animate={{ y: [0, 4, 0] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <path
+                  d="M7 1v12M2 8l5 5 5-5"
+                  stroke="black"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeOpacity="1"
+                />
+              </motion.svg>
+            </div>
+          </motion.div>
         </div>
-        {/* Scroll indicator — bottom right, fades as user scrolls */}
-        <motion.div
-          className="absolute bottom-10 right-8 md:right-16 z-20 flex flex-col items-center gap-2 pointer-events-none"
-          style={{ opacity: textOpacity }}
-        >
-          <div className="relative w-11 h-11 flex items-center justify-center">
-            {/* outer pulsing ring */}
-            <motion.div
-              className="absolute inset-0 rounded-full border border-black/25"
-              animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0, 0.6] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            {/* static ring */}
-            <div className="absolute inset-0 rounded-full border border-black/30" />
-            {/* bouncing arrow */}
-            <motion.svg
-              width="14" height="14" viewBox="0 0 14 14" fill="none"
-              animate={{ y: [0, 3, 0] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <path d="M7 1v12M2 8l5 5 5-5" stroke="black" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-            </motion.svg>
-          </div>
-          <span className="text-[7px] uppercase tracking-[0.35em] text-black/40 font-sans">Scroll</span>
-        </motion.div>
 
         {/* Gradient fade to seamlessly transition into the next section */}
         <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-[#f4f4f4] to-transparent pointer-events-none z-10" />

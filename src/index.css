@@ -104,6 +104,16 @@ body {
 }
 .ticker-track { animation: ticker 25s linear infinite; }
 
+/* ─── spin-slow ─────────────────────────────────────── */
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
 /* ─── project card (light mode) ────────────────────── */
 
 .project-card-light {
